@@ -72,6 +72,11 @@ body {
   gap: 14px;
 }
 
+.screen[hidden],
+[hidden] {
+  display: none !important;
+}
+
 h1 {
   font-size: 1.25rem;
   margin: 6px 0 0;
@@ -294,6 +299,14 @@ input[type="text"]:focus {
   box-shadow: var(--shadow);
   text-align: center;
   z-index: 5;
+}
+
+.game-overlay-msg.countdown {
+  border-color: var(--accent);
+  color: var(--accent);
+  font-size: 3rem;
+  min-width: 96px;
+  padding: 18px 24px;
 }
 
 /* Tap game */

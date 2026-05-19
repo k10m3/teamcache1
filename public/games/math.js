@@ -1,7 +1,8 @@
 // Math Quiz: 5 mental-arithmetic questions.
-import { createTimer, showGameOver } from "./_common.js";
+import { createTimer, showGameOver, startCountdown } from "./_common.js";
 
 const TIME_LIMIT = 60;
+const COUNTDOWN_SECONDS = 5;
 
 export function start(root, onClear) {
   const TOTAL = 5;
@@ -30,6 +31,7 @@ export function start(root, onClear) {
   let idx = 0;
   let q = makeQuestion();
   let finished = false;
+  let timer = null;
 
   root.innerHTML = `
     <div class="game-header">
@@ -47,6 +49,7 @@ export function start(root, onClear) {
         placeholder="answer"
         autocomplete="off"
         required
+        disabled
       />
       <button type="submit">Answer</button>
     </form>
@@ -58,16 +61,6 @@ export function start(root, onClear) {
   const msg = root.querySelector("#math-msg");
   const progressEl = root.querySelector("#math-progress");
 
-  input.focus();
-
-  const timer = createTimer(root, TIME_LIMIT, () => {
-    if (finished) return;
-    finished = true;
-    input.disabled = true;
-    input.blur();
-    showGameOver(root, "Time up!");
-  });
-
   root.querySelector("#math-form").addEventListener("submit", (e) => {
     e.preventDefault();
     if (finished) return;
@@ -77,7 +70,7 @@ export function start(root, onClear) {
       idx += 1;
       if (idx >= TOTAL) {
         finished = true;
-        timer.stop();
+        if (timer) timer.stop();
         msg.textContent = "Cleared!";
         setTimeout(() => onClear(), 300);
         return;
@@ -93,5 +86,17 @@ export function start(root, onClear) {
       input.value = "";
       input.focus();
     }
+  });
+
+  startCountdown(root, COUNTDOWN_SECONDS, () => {
+    timer = createTimer(root, TIME_LIMIT, () => {
+      if (finished) return;
+      finished = true;
+      input.disabled = true;
+      input.blur();
+      showGameOver(root, "Time up!");
+    });
+    input.disabled = false;
+    input.focus();
   });
 }

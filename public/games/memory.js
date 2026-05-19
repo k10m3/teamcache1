@@ -1,7 +1,8 @@
 // Memory Game (Simon-style): repeat the lit sequence.
-import { createTimer, showGameOver } from "./_common.js";
+import { createTimer, showGameOver, startCountdown } from "./_common.js";
 
 const TIME_LIMIT = 30;
+const COUNTDOWN_SECONDS = 5;
 
 export function start(root, onClear) {
   const LENGTH = 5 + Math.floor(Math.random() * 3); // 5-7
@@ -11,7 +12,7 @@ export function start(root, onClear) {
       <span>Watch and repeat</span>
       <span id="memory-progress">0 / ${LENGTH}</span>
     </div>
-    <p id="memory-msg" class="game-message">Watch carefully...</p>
+    <p id="memory-msg" class="game-message">Get ready...</p>
     <div class="memory-grid">
       <div class="memory-pad c0" data-i="0"></div>
       <div class="memory-pad c1" data-i="1"></div>
@@ -30,13 +31,7 @@ export function start(root, onClear) {
   let inputIndex = 0;
   let accepting = false;
   let finished = false;
-
-  const timer = createTimer(root, TIME_LIMIT, () => {
-    if (finished) return;
-    finished = true;
-    accepting = false;
-    showGameOver(root, "Time up!");
-  });
+  let timer = null;
 
   function flash(idx) {
     return new Promise((resolve) => {
@@ -76,18 +71,26 @@ export function start(root, onClear) {
         if (inputIndex === sequence.length) {
           accepting = false;
           finished = true;
-          timer.stop();
+          if (timer) timer.stop();
           msg.textContent = "Cleared!";
           setTimeout(() => onClear(), 400);
         }
       } else {
         accepting = false;
         finished = true;
-        timer.stop();
+        if (timer) timer.stop();
         showGameOver(root, "Wrong!");
       }
     });
   });
 
-  playSequence();
+  startCountdown(root, COUNTDOWN_SECONDS, () => {
+    timer = createTimer(root, TIME_LIMIT, () => {
+      if (finished) return;
+      finished = true;
+      accepting = false;
+      showGameOver(root, "Time up!");
+    });
+    playSequence();
+  });
 }

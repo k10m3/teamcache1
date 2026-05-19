@@ -46,3 +46,32 @@ export function showGameOver(root, message) {
   overlay.textContent = message;
   root.appendChild(overlay);
 }
+
+// Shows a countdown overlay (e.g. 5, 4, 3, 2, 1, Go!) over the game while
+// blocking interaction, then invokes onStart() to begin the actual game.
+export function startCountdown(root, seconds, onStart) {
+  root.classList.add("over");
+  const overlay = document.createElement("div");
+  overlay.className = "game-overlay-msg countdown";
+  overlay.textContent = seconds;
+  root.appendChild(overlay);
+
+  let remaining = seconds;
+  const interval = setInterval(() => {
+    if (!overlay.isConnected) {
+      clearInterval(interval);
+      return;
+    }
+    remaining -= 1;
+    if (remaining > 0) {
+      overlay.textContent = remaining;
+    } else if (remaining === 0) {
+      overlay.textContent = "Go!";
+    } else {
+      clearInterval(interval);
+      overlay.remove();
+      root.classList.remove("over");
+      onStart();
+    }
+  }, 1000);
+}

@@ -1,12 +1,14 @@
 // Tap Game: tap 10 moving targets.
-import { createTimer, showGameOver } from "./_common.js";
+import { createTimer, showGameOver, startCountdown } from "./_common.js";
 
 const TIME_LIMIT = 20;
+const COUNTDOWN_SECONDS = 5;
 
 export function start(root, onClear) {
   const TOTAL = 10;
   let remaining = TOTAL;
   let finished = false;
+  let timer = null;
 
   root.innerHTML = `
     <div class="game-header">
@@ -18,12 +20,6 @@ export function start(root, onClear) {
 
   const board = root.querySelector("#tap-board");
   const counter = root.querySelector("#tap-count");
-
-  const timer = createTimer(root, TIME_LIMIT, () => {
-    if (finished) return;
-    finished = true;
-    showGameOver(root, "Time up!");
-  });
 
   function spawn() {
     if (finished || remaining <= 0) return;
@@ -47,7 +43,7 @@ export function start(root, onClear) {
       counter.textContent = remaining;
       if (remaining === 0) {
         finished = true;
-        timer.stop();
+        if (timer) timer.stop();
         onClear();
       } else {
         spawn();
@@ -57,5 +53,12 @@ export function start(root, onClear) {
     board.appendChild(dot);
   }
 
-  spawn();
+  startCountdown(root, COUNTDOWN_SECONDS, () => {
+    timer = createTimer(root, TIME_LIMIT, () => {
+      if (finished) return;
+      finished = true;
+      showGameOver(root, "Time up!");
+    });
+    spawn();
+  });
 }

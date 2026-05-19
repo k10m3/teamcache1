@@ -1,7 +1,8 @@
 // Number Order: tap 1..9 in order. Numbers placed at random positions.
-import { createTimer, showGameOver } from "./_common.js";
+import { createTimer, showGameOver, startCountdown } from "./_common.js";
 
 const TIME_LIMIT = 30;
+const COUNTDOWN_SECONDS = 5;
 
 export function start(root, onClear) {
   const COUNT = 9;
@@ -19,12 +20,7 @@ export function start(root, onClear) {
   const msg = root.querySelector("#order-msg");
   let next = 1;
   let finished = false;
-
-  const timer = createTimer(root, TIME_LIMIT, () => {
-    if (finished) return;
-    finished = true;
-    showGameOver(root, "Time up!");
-  });
+  let timer = null;
 
   function place() {
     board.innerHTML = "";
@@ -67,13 +63,13 @@ export function start(root, onClear) {
           nextEl.textContent = next <= COUNT ? next : "✓";
           if (next > COUNT) {
             finished = true;
-            timer.stop();
+            if (timer) timer.stop();
             msg.textContent = "Cleared!";
             setTimeout(() => onClear(), 350);
           }
         } else {
           finished = true;
-          timer.stop();
+          if (timer) timer.stop();
           showGameOver(root, "Wrong!");
         }
       });
@@ -83,4 +79,12 @@ export function start(root, onClear) {
   }
 
   place();
+
+  startCountdown(root, COUNTDOWN_SECONDS, () => {
+    timer = createTimer(root, TIME_LIMIT, () => {
+      if (finished) return;
+      finished = true;
+      showGameOver(root, "Time up!");
+    });
+  });
 }
