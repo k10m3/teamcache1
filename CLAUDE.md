@@ -112,6 +112,13 @@ All POST, JSON in / JSON out.
 function. `app.js` loads them dynamically and renders inside `#game-area`.
 Each game is designed to take ~1–2 minutes.
 
+## Git workflow
+
+Commit and push all changes directly to `main`. Do not create feature branches
+unless explicitly asked. The `.claude/settings.json` Stop hook runs
+`git push origin HEAD:main` automatically at the end of each turn, so
+completed work reaches main without a manual push.
+
 ## Deployment
 
 Deployed as a single Worker with the `[assets]` binding pointing at
