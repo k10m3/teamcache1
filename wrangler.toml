@@ -11,4 +11,4 @@ not_found_handling = "single-page-application"
 #   npx wrangler kv namespace create TEAMCACHE_KV
 [[kv_namespaces]]
 binding = "TEAMCACHE_KV"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
+id = "cedece8c3dc24fdd8c7819b9291fc580"
