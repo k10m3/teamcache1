@@ -44,7 +44,13 @@ const state = {
   countdownInterval: null,
 };
 
-const SCREENS = ["enter", "lobby", "game", "cleared", "final", "expired"];
+const SCREENS = ["enter", "lobby", "game", "celebrate", "cleared", "final", "expired"];
+
+// Set while the player is on the post-clear celebrate screen. Polling keeps
+// running underneath (so we still learn when the partner clears), but
+// routeScreenForStatus must not auto-advance the visible screen until the
+// player taps "Show password".
+let celebrating = false;
 
 const ERROR_MESSAGES = {
   accuracy: "GPS accuracy is too low. Please try again.",
@@ -227,7 +233,7 @@ function routeScreenForStatus() {
       break;
     case "cleared":
       renderCleared();
-      showScreen("cleared");
+      if (!celebrating) showScreen("cleared");
       break;
     case "final":
       // We don't have the final payload in heartbeat; if we already showed
@@ -407,9 +413,16 @@ async function doClearGame() {
   state.passwordForPartner = data.passwordForPartner;
   state.status = "cleared";
   renderCleared();
-  showScreen("cleared");
+  celebrating = true;
+  showScreen("celebrate");
   // Refresh state immediately to learn if partner already cleared.
   pollHeartbeat();
+}
+
+function dismissCelebrate() {
+  celebrating = false;
+  renderCleared();
+  showScreen("cleared");
 }
 
 async function doSubmitPassword(e) {
@@ -520,6 +533,7 @@ function init() {
     if (state.game) loadGame(state.game);
   });
   document.getElementById("change-game-btn").addEventListener("click", doChangeGame);
+  document.getElementById("celebrate-continue-btn").addEventListener("click", dismissCelebrate);
   document.getElementById("password-form").addEventListener("submit", doSubmitPassword);
   document.getElementById("copy-coords-btn").addEventListener("click", copyCoords);
   document.getElementById("restart-btn").addEventListener("click", () => {

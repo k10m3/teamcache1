@@ -237,6 +237,76 @@ input[type="text"]:focus {
 }
 
 /* ============================================
+   Celebrate screen
+============================================ */
+
+.celebrate-card {
+  text-align: center;
+  padding: 28px 18px;
+}
+
+.celebrate-burst {
+  font-size: 5rem;
+  line-height: 1;
+  margin: 4px auto 12px;
+  animation: celebrate-pop 0.7s cubic-bezier(0.2, 1.4, 0.4, 1) both,
+    celebrate-float 2.4s ease-in-out 0.7s infinite;
+  transform-origin: center;
+}
+
+.celebrate-title {
+  color: var(--accent);
+  font-size: 2.2rem;
+  margin: 0 0 6px;
+  animation: celebrate-rise 0.6s ease-out 0.15s both;
+}
+
+.celebrate-card .muted {
+  margin: 6px 0 18px;
+  animation: celebrate-rise 0.6s ease-out 0.3s both;
+}
+
+#celebrate-continue-btn {
+  animation: celebrate-rise 0.6s ease-out 0.45s both;
+}
+
+@keyframes celebrate-pop {
+  0% {
+    transform: scale(0.2) rotate(-20deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.25) rotate(8deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+@keyframes celebrate-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes celebrate-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
    Game area
 ============================================ */
 
