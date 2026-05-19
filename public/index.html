@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"
+    />
+    <meta name="theme-color" content="#0e7c3a" />
+    <title>Teamcache1</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header id="topbar">
+      <div class="brand">Teamcache1</div>
+      <div id="timer" class="timer" hidden></div>
+    </header>
+
+    <main id="app">
+      <!-- Screen: enter secret word -->
+      <section id="screen-enter" class="screen">
+        <h1>Enter your team's secret word</h1>
+        <p class="muted">
+          Allow location access. You must be within 20&nbsp;m of one of the two cache points.
+        </p>
+        <form id="enter-form" autocomplete="off">
+          <input
+            id="secret-input"
+            type="text"
+            placeholder="secret word"
+            autocapitalize="off"
+            spellcheck="false"
+            autocomplete="off"
+            required
+          />
+          <button id="enter-btn" type="submit">Enter</button>
+        </form>
+        <p id="enter-error" class="error" hidden></p>
+        <p id="enter-status" class="muted" hidden></p>
+      </section>
+
+      <!-- Screen: waiting / ready -->
+      <section id="screen-lobby" class="screen" hidden>
+        <div class="card">
+          <div class="row">
+            <span class="badge ok">You</span>
+            <span id="self-status">Entered at <strong id="self-point-label"></strong></span>
+          </div>
+          <div class="row">
+            <span id="partner-badge" class="badge wait">Partner</span>
+            <span id="partner-status">Waiting for the other team...</span>
+          </div>
+          <p class="muted small">Please make sure they use the same secret word.</p>
+        </div>
+        <button id="get-password-btn" disabled>Get Password</button>
+        <p id="lobby-error" class="error" hidden></p>
+      </section>
+
+      <!-- Screen: in-game -->
+      <section id="screen-game" class="screen" hidden>
+        <p class="muted">Clear the game to get the password for your partner.</p>
+        <div id="game-area" class="game-area"></div>
+        <div class="row gap">
+          <button id="retry-btn" type="button">Retry</button>
+          <button id="change-game-btn" type="button">Change Game</button>
+        </div>
+        <p id="game-error" class="error" hidden></p>
+      </section>
+
+      <!-- Screen: cleared / password exchange -->
+      <section id="screen-cleared" class="screen" hidden>
+        <div class="card">
+          <h2 class="cleared-title">Cleared!</h2>
+          <p class="muted">Your password for partner:</p>
+          <div id="my-password" class="password-display"></div>
+          <p class="muted small">Share this with your partner via phone/message.</p>
+        </div>
+
+        <div id="partner-wait" class="card" hidden>
+          <p class="muted">Waiting for your partner to clear their game...</p>
+        </div>
+
+        <form id="password-form" class="card" hidden autocomplete="off">
+          <label for="password-input">Enter the password from your partner</label>
+          <input
+            id="password-input"
+            type="text"
+            placeholder="ABC123"
+            maxlength="6"
+            autocapitalize="characters"
+            autocomplete="off"
+            spellcheck="false"
+            required
+          />
+          <button id="submit-password-btn" type="submit">Submit</button>
+          <p id="password-error" class="error" hidden></p>
+        </form>
+      </section>
+
+      <!-- Screen: final -->
+      <section id="screen-final" class="screen" hidden>
+        <div class="card final-card">
+          <h2>🎉 You found the password!</h2>
+          <p id="final-heading" class="muted"></p>
+          <div id="final-coords" class="coords"></div>
+          <p id="final-share-note" class="muted small"></p>
+          <button id="copy-coords-btn" type="button">📋 Copy coordinates</button>
+          <p id="copy-feedback" class="muted small" hidden>Copied!</p>
+          <h3>Hint:</h3>
+          <p id="final-hint" class="hint"></p>
+        </div>
+      </section>
+
+      <!-- Screen: expired -->
+      <section id="screen-expired" class="screen" hidden>
+        <div class="card">
+          <h2>Session expired.</h2>
+          <p>Please start over.</p>
+          <button id="restart-btn" type="button">Back</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>

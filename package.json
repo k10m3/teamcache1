@@ -1,0 +1,13 @@
+{
+  "name": "teamcache1",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Two-point teamwork geocache web app on Cloudflare Workers + KV",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^3.90.0"
+  }
+}

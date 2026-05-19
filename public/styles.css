@@ -1,0 +1,451 @@
+:root {
+  --bg: #f4f6f4;
+  --fg: #1a1a1a;
+  --muted: #6b7280;
+  --accent: #0e7c3a;
+  --accent-dark: #095a2a;
+  --danger: #c0392b;
+  --card: #ffffff;
+  --border: #e3e6e3;
+  --warn: #d97706;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Sans",
+    "Noto Sans JP", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding-top: max(12px, env(safe-area-inset-top));
+}
+
+.brand {
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+}
+
+.timer {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+}
+
+.timer.warn {
+  background: var(--warn);
+}
+
+#app {
+  padding: 16px;
+  max-width: 520px;
+  margin: 0 auto;
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+h1 {
+  font-size: 1.25rem;
+  margin: 6px 0 0;
+}
+
+h2 {
+  margin: 0 0 8px;
+  font-size: 1.15rem;
+}
+
+h3 {
+  margin: 12px 0 4px;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 0.85rem;
+}
+
+.error {
+  color: var(--danger);
+  background: #fceae8;
+  border: 1px solid #f3c8c3;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+}
+
+.row.gap {
+  gap: 12px;
+}
+
+.badge {
+  display: inline-block;
+  min-width: 64px;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: white;
+  background: var(--muted);
+}
+
+.badge.ok {
+  background: var(--accent);
+}
+
+.badge.wait {
+  background: #b58a00;
+}
+
+button {
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 16px;
+  cursor: pointer;
+  touch-action: manipulation;
+  min-height: 48px;
+  transition: background 0.1s ease;
+}
+
+button:active {
+  background: var(--accent-dark);
+}
+
+button:disabled {
+  background: #b6c4bb;
+  cursor: not-allowed;
+}
+
+button.secondary {
+  background: #5b6770;
+}
+
+#retry-btn,
+#change-game-btn {
+  background: #5b6770;
+  flex: 1;
+}
+
+input[type="text"] {
+  font-family: inherit;
+  font-size: 1.05rem;
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: white;
+  min-height: 48px;
+}
+
+input[type="text"]:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+#enter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#password-input {
+  letter-spacing: 0.25em;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+
+.password-display {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-align: center;
+  background: #f6fbf7;
+  border: 1px dashed var(--accent);
+  border-radius: 10px;
+  padding: 14px;
+  user-select: all;
+}
+
+.cleared-title {
+  color: var(--accent);
+}
+
+/* ============================================
+   Game area
+============================================ */
+
+.game-area {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  min-height: 340px;
+  padding: 12px;
+  box-shadow: var(--shadow);
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  color: var(--muted);
+}
+
+.game-message {
+  text-align: center;
+  font-weight: 600;
+  margin: 8px 0;
+}
+
+/* Tap game */
+.tap-board {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  background: #eef5ee;
+  border-radius: 10px;
+  overflow: hidden;
+  touch-action: manipulation;
+}
+
+.tap-target {
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Memory game (Simon) */
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 10px 0;
+}
+
+.memory-pad {
+  height: 110px;
+  border-radius: 12px;
+  background: #cbd5d2;
+  transition: filter 0.15s ease;
+  border: 2px solid transparent;
+  cursor: pointer;
+  user-select: none;
+}
+
+.memory-pad.c0 {
+  background: #e84e4e;
+}
+.memory-pad.c1 {
+  background: #f0a91a;
+}
+.memory-pad.c2 {
+  background: #2ea1d8;
+}
+.memory-pad.c3 {
+  background: #4caf50;
+}
+
+.memory-pad.lit {
+  filter: brightness(1.6);
+  border-color: white;
+}
+
+/* Match game */
+.match-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.match-card {
+  aspect-ratio: 3 / 4;
+  border-radius: 8px;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.1s ease;
+}
+
+.match-card.revealed {
+  background: #fafafa;
+  color: var(--fg);
+  border: 1px solid var(--border);
+}
+
+.match-card.matched {
+  background: #d4eedb;
+  color: #095a2a;
+  border: 1px solid #b6dcc2;
+  cursor: default;
+}
+
+/* Math quiz */
+.math-question {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 16px 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.math-input {
+  font-size: 1.5rem;
+  text-align: center;
+  letter-spacing: 0.15em;
+}
+
+.math-progress {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* Order game */
+.order-board {
+  position: relative;
+  width: 100%;
+  height: 340px;
+  background: #eef5ee;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.order-cell {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  background: var(--accent);
+  color: white;
+  font-weight: 700;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.order-cell.done {
+  background: #b6c4bb;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Final */
+.final-card {
+  text-align: center;
+}
+
+.coords {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 1.6rem;
+  font-weight: 700;
+  background: #f6fbf7;
+  border: 1px dashed var(--accent);
+  border-radius: 10px;
+  padding: 14px;
+  margin: 12px 0;
+  letter-spacing: 0.05em;
+}
+
+.hint {
+  background: #fff8e6;
+  border: 1px solid #f3e2a9;
+  border-radius: 10px;
+  padding: 12px;
+  text-align: left;
+}
+
+@media (max-width: 380px) {
+  h1 {
+    font-size: 1.1rem;
+  }
+  .coords {
+    font-size: 1.3rem;
+  }
+  .password-display {
+    font-size: 1.7rem;
+  }
+}
