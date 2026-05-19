@@ -1,4 +1,8 @@
 // Memory Game (Simon-style): repeat the lit sequence.
+import { createTimer, showGameOver } from "./_common.js";
+
+const TIME_LIMIT = 30;
+
 export function start(root, onClear) {
   const LENGTH = 5 + Math.floor(Math.random() * 3); // 5-7
 
@@ -25,6 +29,14 @@ export function start(root, onClear) {
 
   let inputIndex = 0;
   let accepting = false;
+  let finished = false;
+
+  const timer = createTimer(root, TIME_LIMIT, () => {
+    if (finished) return;
+    finished = true;
+    accepting = false;
+    showGameOver(root, "Time up!");
+  });
 
   function flash(idx) {
     return new Promise((resolve) => {
@@ -42,8 +54,10 @@ export function start(root, onClear) {
     msg.textContent = "Watch carefully...";
     await new Promise((r) => setTimeout(r, 500));
     for (const idx of sequence) {
+      if (finished) return;
       await flash(idx);
     }
+    if (finished) return;
     msg.textContent = "Your turn!";
     accepting = true;
     inputIndex = 0;
@@ -51,8 +65,8 @@ export function start(root, onClear) {
   }
 
   pads.forEach((pad) => {
-    pad.addEventListener("pointerdown", async () => {
-      if (!accepting) return;
+    pad.addEventListener("pointerdown", () => {
+      if (!accepting || finished) return;
       const i = Number(pad.dataset.i);
       pad.classList.add("lit");
       setTimeout(() => pad.classList.remove("lit"), 180);
@@ -61,13 +75,16 @@ export function start(root, onClear) {
         progress.textContent = `${inputIndex} / ${LENGTH}`;
         if (inputIndex === sequence.length) {
           accepting = false;
+          finished = true;
+          timer.stop();
           msg.textContent = "Cleared!";
           setTimeout(() => onClear(), 400);
         }
       } else {
         accepting = false;
-        msg.textContent = "Oops — try again";
-        setTimeout(playSequence, 800);
+        finished = true;
+        timer.stop();
+        showGameOver(root, "Wrong!");
       }
     });
   });

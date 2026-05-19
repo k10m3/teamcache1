@@ -1,4 +1,8 @@
 // Math Quiz: 5 mental-arithmetic questions.
+import { createTimer, showGameOver } from "./_common.js";
+
+const TIME_LIMIT = 60;
+
 export function start(root, onClear) {
   const TOTAL = 5;
 
@@ -25,6 +29,7 @@ export function start(root, onClear) {
 
   let idx = 0;
   let q = makeQuestion();
+  let finished = false;
 
   root.innerHTML = `
     <div class="game-header">
@@ -55,13 +60,24 @@ export function start(root, onClear) {
 
   input.focus();
 
+  const timer = createTimer(root, TIME_LIMIT, () => {
+    if (finished) return;
+    finished = true;
+    input.disabled = true;
+    input.blur();
+    showGameOver(root, "Time up!");
+  });
+
   root.querySelector("#math-form").addEventListener("submit", (e) => {
     e.preventDefault();
+    if (finished) return;
     const v = parseInt(input.value, 10);
     if (Number.isNaN(v)) return;
     if (v === q.ans) {
       idx += 1;
       if (idx >= TOTAL) {
+        finished = true;
+        timer.stop();
         msg.textContent = "Cleared!";
         setTimeout(() => onClear(), 300);
         return;

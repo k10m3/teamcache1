@@ -1,4 +1,8 @@
 // Number Order: tap 1..9 in order. Numbers placed at random positions.
+import { createTimer, showGameOver } from "./_common.js";
+
+const TIME_LIMIT = 30;
+
 export function start(root, onClear) {
   const COUNT = 9;
   root.innerHTML = `
@@ -14,6 +18,13 @@ export function start(root, onClear) {
   const nextEl = root.querySelector("#order-next");
   const msg = root.querySelector("#order-msg");
   let next = 1;
+  let finished = false;
+
+  const timer = createTimer(root, TIME_LIMIT, () => {
+    if (finished) return;
+    finished = true;
+    showGameOver(root, "Time up!");
+  });
 
   function place() {
     board.innerHTML = "";
@@ -48,21 +59,22 @@ export function start(root, onClear) {
       cell.style.left = x + "px";
       cell.style.top = y + "px";
       cell.addEventListener("pointerdown", () => {
+        if (finished) return;
         const v = Number(cell.dataset.n);
         if (v === next) {
           cell.classList.add("done");
           next += 1;
           nextEl.textContent = next <= COUNT ? next : "✓";
           if (next > COUNT) {
+            finished = true;
+            timer.stop();
             msg.textContent = "Cleared!";
             setTimeout(() => onClear(), 350);
           }
         } else {
-          msg.textContent = "Wrong order — start again";
-          next = 1;
-          nextEl.textContent = next;
-          // Reset.
-          for (const c of cells) c.classList.remove("done");
+          finished = true;
+          timer.stop();
+          showGameOver(root, "Wrong!");
         }
       });
       cells.push(cell);

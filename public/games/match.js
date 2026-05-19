@@ -1,4 +1,8 @@
 // Memory Match: 4x3 = 12 cards (6 pairs).
+import { createTimer, showGameOver } from "./_common.js";
+
+const TIME_LIMIT = 60;
+
 export function start(root, onClear) {
   const SYMBOLS = ["🍎", "🍋", "🍇", "🍓", "🍊", "🍉"];
   const deck = [];
@@ -22,6 +26,14 @@ export function start(root, onClear) {
   let first = null;
   let lock = false;
   let matched = 0;
+  let finished = false;
+
+  const timer = createTimer(root, TIME_LIMIT, () => {
+    if (finished) return;
+    finished = true;
+    lock = true;
+    showGameOver(root, "Time up!");
+  });
 
   deck.forEach((sym, idx) => {
     const card = document.createElement("div");
@@ -30,6 +42,7 @@ export function start(root, onClear) {
     card.dataset.idx = idx;
     card.textContent = "?";
     card.addEventListener("pointerdown", () => {
+      if (finished) return;
       if (lock) return;
       if (card.classList.contains("matched")) return;
       if (card.classList.contains("revealed")) return;
@@ -47,6 +60,8 @@ export function start(root, onClear) {
         matched += 1;
         progressEl.textContent = `${matched} / ${SYMBOLS.length}`;
         if (matched === SYMBOLS.length) {
+          finished = true;
+          timer.stop();
           setTimeout(() => onClear(), 350);
         }
       } else {
@@ -59,7 +74,7 @@ export function start(root, onClear) {
           a.textContent = "?";
           b.textContent = "?";
           first = null;
-          lock = false;
+          if (!finished) lock = false;
         }, 700);
       }
     });
